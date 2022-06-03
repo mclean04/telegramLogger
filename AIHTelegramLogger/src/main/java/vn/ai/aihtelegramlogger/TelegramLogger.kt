@@ -6,22 +6,33 @@ import androidx.lifecycle.ViewModelProvider
 import vn.ai.aihtelegramlogger.Services.BuildEnv
 import vn.ai.aihtelegramlogger.Services.Constants
 import vn.ai.aihtelegramlogger.Services.SendMessage
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStreamReader
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.regex.Pattern
 
 
-object TelegramLogger {
-    private lateinit var activity: AppCompatActivity
+class TelegramLogger(
+    private val activity: AppCompatActivity,
+    private val teleBotToken: String,
+    private val chat_Id: Int,
+    private val env: BuildEnv
+) {
 
-    private val viewModel :TelegramViewModel by lazy {
+    init {
+        initConstant()
+    }
+
+    private val viewModel: TelegramViewModel by lazy {
         ViewModelProvider(activity)[TelegramViewModel::class.java]
     }
 
-    fun initTelegramLogger(activity: AppCompatActivity, teleBotToken: String, chat_Id: Int, env: BuildEnv){
-        this.activity = activity
-        Constants.teleBotToken = teleBotToken
+    private fun initConstant() {
         Constants.env = env
         Constants.chat_id = chat_Id
+        Constants.teleBotToken = teleBotToken
     }
 
     fun sendMessage(sendModel: SendMessage) {
@@ -29,8 +40,11 @@ object TelegramLogger {
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
         val today = calendar.time
         val currentDay = sdf.format(today)
-        val temp = "${sendModel.os} - ${sendModel.appName} - Version:${sendModel.appVersion}] \nEnvironment: [${sendModel.env.name}]" +
-                "\n[${currentDay}] - ${calendar.get(Calendar.HOUR)}:${calendar.get(Calendar.MINUTE)}  error: ${sendModel.errorText} "
+        val temp =
+            "${sendModel.os} - ${sendModel.appName} - Version:${sendModel.appVersion}] \nEnvironment: [${sendModel.env.name}]" +
+                    "\n[${currentDay}] - ${calendar.get(Calendar.HOUR)}:${calendar.get(Calendar.MINUTE)}  " +
+                    "class: ${sendModel.className} ; fun: ${sendModel.functionName} " +
+                    " Error: ${sendModel.errorText}"
         viewModel.sendMessage(temp)
     }
 }

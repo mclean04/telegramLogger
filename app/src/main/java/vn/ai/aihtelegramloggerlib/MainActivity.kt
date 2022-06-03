@@ -1,6 +1,7 @@
 package vn.ai.aihtelegramloggerlib
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -12,7 +13,6 @@ import vn.ai.aihtelegramlogger.Services.BuildEnv
 import vn.ai.aihtelegramlogger.Services.SendMessage
 import vn.ai.aihtelegramlogger.TelegramLogger
 import vn.ai.aihtelegramloggerlib.databinding.ActivityMainBinding
-import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -28,26 +28,32 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
+//        val navController = findNavController(R.id.nav_host_fragment_content_main)
+//        appBarConfiguration = AppBarConfiguration(navController.graph)
+//        setupActionBarWithNavController(navController, appBarConfiguration)
+
+        val botLogger = TelegramLogger(
+            this as AppCompatActivity,
+            "bot2130700463:AAH_XbAK0e_zYVefgJ_bvPsH12Fj51xzNOw",
+            -693513093,
+            BuildEnv.DEBUG
+        )
+        Log.e("MainActivity", "onCreate: log cat testing" )
 
         binding.fab.setOnClickListener { view ->
-            TelegramLogger.initTelegramLogger(
-                this as AppCompatActivity,
-                "bot2130700463:AAH_XbAK0e_zYVefgJ_bvPsH12Fj51xzNOw",
-                -693513093,
-                BuildEnv.DEBUG
-            )
+            try {
+                throw RuntimeException("Run to this line and crash app");
+            } catch (e:Exception){
+                botLogger.sendMessage(SendMessage(
+                    env = BuildEnv.DEBUG,
+                    functionName = "onCreate",
+                    className = "MainActivity",
+                    appName = applicationInfo.loadLabel(packageManager).toString(),
+                    appVersion = "1.1.1",
+                    errorText = e.message
+                ))
+            }
 
-            TelegramLogger.sendMessage(SendMessage(
-                env = BuildEnv.DEBUG,
-                functionName = "onCreate",
-                className = "MainActivity",
-                appName = applicationInfo.loadLabel(packageManager).toString(),
-                appVersion = "1.1.1",
-                errorText = "testing"
-            ))
         }
     }
 

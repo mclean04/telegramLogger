@@ -1,6 +1,7 @@
 package vn.ai.aihtelegramlogger
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -25,7 +26,9 @@ class TelegramViewModel(app: Application) : AndroidViewModel(app) {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     _chatInfo.postValue(it)
-                }, {})
+                }, {
+                    Toast.makeText(getApplication(), it.message, Toast.LENGTH_SHORT).show()
+                })
         )
 
 
