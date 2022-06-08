@@ -35,16 +35,22 @@ class TelegramLogger(
         Constants.teleBotToken = teleBotToken
     }
 
-    fun sendMessage(sendModel: SendMessage) {
+    fun sendMessage(sendModel: SendMessage,callBack:(Boolean)->Unit? = {_:Boolean ->}) {
         val calendar = Calendar.getInstance()
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
         val today = calendar.time
         val currentDay = sdf.format(today)
         val temp =
-            "${sendModel.os} - ${sendModel.appName} - Version:${sendModel.appVersion}] \nEnvironment: [${sendModel.env.name}]" +
+            "${sendModel.os} - ${sendModel.appName} - Version:${sendModel.appVersion}] \nEnvironment: [${Constants.env.name}]" +
                     "\n[${currentDay}] - ${calendar.get(Calendar.HOUR)}:${calendar.get(Calendar.MINUTE)}  " +
                     "class: ${sendModel.className} ; fun: ${sendModel.functionName} " +
-                    " Error: ${sendModel.errorText}"
+                    "Error: ${sendModel.errorText}"
         viewModel.sendMessage(temp)
+        viewModel.chatInfo.observe(activity){
+            if (it.ok == true)
+                callBack(true)
+            else
+                callBack(false)
+        }
     }
 }

@@ -9,10 +9,10 @@ object Constants {
 }
 
 enum class BuildEnv{
-    @SerializedName("debug")
+    @SerializedName("DEBUG")
     DEBUG,
-    @SerializedName("staging")
+    @SerializedName("STAGING")
     STAGING,
-    @SerializedName("production")
+    @SerializedName("PRODUCTION")
     PRODUCTION
 }

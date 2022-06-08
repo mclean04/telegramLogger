@@ -28,10 +28,6 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
-//        val navController = findNavController(R.id.nav_host_fragment_content_main)
-//        appBarConfiguration = AppBarConfiguration(navController.graph)
-//        setupActionBarWithNavController(navController, appBarConfiguration)
-
         val botLogger = TelegramLogger(
             this as AppCompatActivity,
             "bot2130700463:AAH_XbAK0e_zYVefgJ_bvPsH12Fj51xzNOw",
@@ -45,7 +41,6 @@ class MainActivity : AppCompatActivity() {
                 throw RuntimeException("Run to this line and crash app");
             } catch (e:Exception){
                 botLogger.sendMessage(SendMessage(
-                    env = BuildEnv.DEBUG,
                     functionName = "onCreate",
                     className = "MainActivity",
                     appName = applicationInfo.loadLabel(packageManager).toString(),
