@@ -35,11 +35,10 @@ class SecondFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonSecond.setOnClickListener {
-            val telegramLogger = TelegramLogger.getInstance()
             try {
                 throw RuntimeException("Run to this line and crash app");
             } catch (e: Exception) {
-                telegramLogger.sendMessage(
+                TelegramLogger.sendMessage(
                     SendMessage(
                         functionName = "onViewCreated",
                         className = "SecondFragment",

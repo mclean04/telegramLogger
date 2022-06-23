@@ -3,7 +3,7 @@ package vn.ai.aihtelegramlogger.Services
 import com.google.gson.annotations.SerializedName
 
 object Constants {
-    var chat_id: Int? = null
+    var chatId: Int? = null
     var teleBotToken :String? = null
     var env:BuildEnv = BuildEnv.NONE
 }

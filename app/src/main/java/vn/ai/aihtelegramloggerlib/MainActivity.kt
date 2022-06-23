@@ -33,19 +33,15 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
 
-        TelegramLogger.Builder()
-            .chatId(-693513093)
-            .teleBotToken("bot2130700463:AAH_XbAK0e_zYVefgJ_bvPsH12Fj51xzNOw")
-            .env(BuildEnv.DEBUG)
+        TelegramLogger
+            .Builder("bot2130700463:AAH_XbAK0e_zYVefgJ_bvPsH12Fj51xzNOw",-693513093)
             .initialize()
-
-        val botLogger = TelegramLogger.getInstance()
 
         binding.fab.setOnClickListener { view ->
             try {
                 throw RuntimeException("Run to this line and crash app");
             } catch (e: Exception) {
-                botLogger.sendMessage(
+                TelegramLogger.sendMessage(
                     SendMessage(
                         functionName = "onCreate",
                         className = "MainActivity",

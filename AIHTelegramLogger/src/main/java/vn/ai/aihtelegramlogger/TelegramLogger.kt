@@ -11,41 +11,20 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class TelegramLogger(
-    private val teleBotToken: String? = null,
-    var chatId: Int? = null,
-    var env: BuildEnv? = null
-) {
+object TelegramLogger{
 
+    private const val API_ENDPOINT = "https://api.telegram.org/"
     data class Builder(
-        var teleBotToken: String? = null,
-        var chatId: Int? = null,
+        var teleBotToken: String,
+        var chatId: Int,
         var env: BuildEnv = BuildEnv.DEBUG
     ) {
-
-
-        fun teleBotToken(token: String) = apply { this.teleBotToken = token }
-        fun chatId(chatId: Int) = apply { this.chatId = chatId }
-        fun env(environment: BuildEnv) = apply { this.env = environment }
-
         fun initialize() {
             if (Constants.teleBotToken == null) {
-                Constants.teleBotToken = teleBotToken ?: ""
-                Constants.chat_id = chatId?: -1
+                Constants.teleBotToken = teleBotToken
+                Constants.chatId = chatId
                 Constants.env = env
             }
-        }
-    }
-
-    companion object {
-        private var mInstant: TelegramLogger? = null
-        private const val API_ENDPOINT = "https://api.telegram.org/"
-
-        fun getInstance(): TelegramLogger {
-            if (mInstant == null) {
-                mInstant = TelegramLogger(Constants.teleBotToken,Constants.chat_id,Constants.env)
-            }
-            return mInstant as TelegramLogger
         }
     }
 
@@ -55,14 +34,14 @@ class TelegramLogger(
         val today = calendar.time
         val currentDay = sdf.format(today)
         val temp =
-            "${sendModel.os} - ${sendModel.appName} - Version:${sendModel.appVersion}] \nEnvironment: [${env?.name}]" +
+            "${sendModel.os} - ${sendModel.appName} - Version:${sendModel.appVersion}] \nEnvironment: [${Constants.env.name}]" +
                     "\n[${currentDay}] - ${calendar.get(Calendar.HOUR)}:${calendar.get(Calendar.MINUTE)}  " +
                     "class: ${sendModel.className} ; fun: ${sendModel.functionName} " +
                     "Error: ${sendModel.errorText}"
 
         val body = RequestBody.create(null, byteArrayOf())
         val request = Request.Builder()
-            .url("${API_ENDPOINT}${teleBotToken}/sendMessage?chat_id=${chatId}&text=${temp}")
+            .url("${API_ENDPOINT}${Constants.teleBotToken}/sendMessage?chat_id=${Constants.chatId}&text=${temp}")
             .post(body)
             .build()
 
