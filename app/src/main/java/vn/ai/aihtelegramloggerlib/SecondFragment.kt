@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import vn.ai.aihtelegramlogger.Services.SendMessage
+import vn.ai.aihtelegramlogger.TelegramLogger
 import vn.ai.aihtelegramloggerlib.databinding.FragmentSecondBinding
 
 /**
@@ -33,7 +35,20 @@ class SecondFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+            val telegramLogger = TelegramLogger.getInstance()
+            try {
+                throw RuntimeException("Run to this line and crash app");
+            } catch (e: Exception) {
+                telegramLogger.sendMessage(
+                    SendMessage(
+                        functionName = "onViewCreated",
+                        className = "SecondFragment",
+                        appName = "testing",
+                        appVersion = "1.1.1",
+                        errorText = e.message
+                    )
+                )
+            }
         }
     }
 

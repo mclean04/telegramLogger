@@ -28,25 +28,32 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
-        val botLogger = TelegramLogger(
-            this as AppCompatActivity,
-            "bot2130700463:AAH_XbAK0e_zYVefgJ_bvPsH12Fj51xzNOw",
-            -693513093,
-            BuildEnv.DEBUG
-        )
-        Log.e("MainActivity", "onCreate: log cat testing" )
+        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        appBarConfiguration = AppBarConfiguration(navController.graph)
+        setupActionBarWithNavController(navController, appBarConfiguration)
+
+
+        TelegramLogger.Builder()
+            .chatId(-693513093)
+            .teleBotToken("bot2130700463:AAH_XbAK0e_zYVefgJ_bvPsH12Fj51xzNOw")
+            .env(BuildEnv.DEBUG)
+            .initialize()
+
+        val botLogger = TelegramLogger.getInstance()
 
         binding.fab.setOnClickListener { view ->
             try {
                 throw RuntimeException("Run to this line and crash app");
-            } catch (e:Exception){
-                botLogger.sendMessage(SendMessage(
-                    functionName = "onCreate",
-                    className = "MainActivity",
-                    appName = applicationInfo.loadLabel(packageManager).toString(),
-                    appVersion = "1.1.1",
-                    errorText = e.message
-                ))
+            } catch (e: Exception) {
+                botLogger.sendMessage(
+                    SendMessage(
+                        functionName = "onCreate",
+                        className = "MainActivity",
+                        appName = applicationInfo.loadLabel(packageManager).toString(),
+                        appVersion = "1.1.1",
+                        errorText = e.message
+                    )
+                )
             }
 
         }
