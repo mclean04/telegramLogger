@@ -34,7 +34,13 @@ class MainActivity : AppCompatActivity() {
 
 
         TelegramLogger
-            .Builder("bot2130700463:AAH_XbAK0e_zYVefgJ_bvPsH12Fj51xzNOw",-693513093)
+            .Builder(
+                "bot2130700463:AAH_XbAK0e_zYVefgJ_bvPsH12Fj51xzNOw",
+                -693513093,
+                "Anh Tú",
+                userPhone = "+840000000567",
+                allowSendMessage = true
+            )
             .initialize()
 
         binding.fab.setOnClickListener { view ->
